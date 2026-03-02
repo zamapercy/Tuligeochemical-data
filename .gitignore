@@ -33,10 +33,7 @@ env/
 *.swo
 *~
 
-# Data files (keep code, exclude large datasets)
-*.xls
-*.xlsx
-*.csv
+# Data files (generated)
 output.log
 
 # Generated files
