@@ -461,8 +461,9 @@ class GeochemPlotter:
 # Example usage
 if __name__ == "__main__":
     # Initialize the plotter
-    file_path = r"c:\Users\mzake\OneDrive\Desktop\Tuli dataset\Tuli dataset.xls"
-    plotter = GeochemPlotter(file_path)
+    from pathlib import Path
+    file_path = Path(__file__).resolve().parent / "Tuli dataset.xls"
+    plotter = GeochemPlotter(str(file_path))
     
     # List available elements
     elements = plotter.list_available_elements()
