@@ -66,17 +66,33 @@ def main() -> None:
     st.title("Tuli Dataset Geochemical Plotter")
 
     default_excel = _default_excel_path()
-    excel_input = st.sidebar.text_input("Excel file path", str(default_excel))
-
-    if not Path(excel_input).exists():
-        st.error(f"Excel file not found: {excel_input}")
+    excel_path_str = str(default_excel)
+    
+    # Debug: Show where we're looking for the file
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("Debug Info")
+    st.sidebar.text(f"Looking for: {excel_path_str}")
+    st.sidebar.text(f"Exists: {Path(excel_path_str).exists()}")
+    
+    if not Path(excel_path_str).exists():
+        st.error(f"❌ Excel file not found: {excel_path_str}")
+        st.info("Place 'Tuli dataset.xls' in the repository root folder and redeploy.")
         st.stop()
 
-    with st.spinner("Loading dataset..."):
-        plotter = get_plotter(excel_input)
+    try:
+        with st.spinner("Loading dataset..."):
+            plotter = get_plotter(excel_path_str)
+        st.sidebar.success("✅ Data loaded successfully")
+    except Exception as e:
+        st.error(f"Error loading data: {str(e)}")
+        st.stop()
 
     elements = plotter.list_available_elements()
     boreholes = list(plotter.data.keys())
+
+    st.sidebar.markdown("---")
+    st.sidebar.write(f"**Boreholes loaded:** {len(boreholes)}")
+    st.sidebar.write(f"**Elements available:** {len(elements)}")
 
     tab_profiles, tab_scatter, tab_borehole, tab_data = st.tabs(
         ["Depth Profiles", "Scatter", "Single Borehole", "Data & Stats"]
