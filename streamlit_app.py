@@ -18,7 +18,15 @@ def get_plotter(excel_path: str) -> GeochemPlotter:
 
 
 def _default_excel_path() -> Path:
-    return Path(__file__).resolve().parent / "Tuli dataset.xls"
+    """Return path to Excel file, checking multiple common locations."""
+    candidates = [
+        Path(__file__).resolve().parent / "Tuli dataset.xls",
+        Path(__file__).resolve().parent / "Tuli_dataset.xls",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]  # Return first path even if not found (will error with helpful message)
 
 
 def _image_bytes_from_temp_plot(plot_fn) -> bytes:
